@@ -1,0 +1,9 @@
+{% block sidenav %}
+<a href="/admin" class="{% if active == 'dashboard' %}on{% endif %}"><span class="nav-ico">📈</span>数据总览</a>
+<a href="/admin/items" class="{% if active == 'items' %}on{% endif %}"><span class="nav-ico">📝</span>条目管理</a>
+<a href="/admin/categories" class="{% if active == 'categories' %}on{% endif %}"><span class="nav-ico">🗂️</span>分类管理</a>
+<a href="/admin/users" class="{% if active == 'users' %}on{% endif %}"><span class="nav-ico">👥</span>账号管理</a>
+<a href="/admin/logs" class="{% if active == 'logs' %}on{% endif %}"><span class="nav-ico">🧾</span>采集日志</a>
+<a href="/admin/password" class="{% if active == 'password' %}on{% endif %}"><span class="nav-ico">🔑</span>改密码</a>
+<a href="/"><span class="nav-ico">🏠</span>返回前台</a>
+{% endblock %}

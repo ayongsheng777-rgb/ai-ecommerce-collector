@@ -3,19 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>登录 - AI 与电商数据采集</title>
+<title>登录 - 数据采集</title>
 <link rel="stylesheet" href="/static/style.css">
 </head>
 <body class="login-body">
-<div class="login-card">
-  <h1>📊 AI 与电商数据采集</h1>
-  <p class="sub">请登录后查看</p>
-  {% if error %}<div class="alert">{{ error }}</div>{% endif %}
-  <form method="post" action="/login">
-    <label>账号<input type="text" name="username" required autofocus></label>
-    <label>密码<input type="password" name="password" required></label>
-    <button type="submit">登录</button>
-  </form>
+<div class="login-wrap">
+  <div class="login-card">
+    <div class="login-logo">📊</div>
+    <h1>数据采集</h1>
+    <p class="sub">AI 技术追新 · 电商工具 · 电商资讯</p>
+    {% if error %}<div class="alert">{{ error }}</div>{% endif %}
+    <form method="post" action="/login">
+      <label>账号<input type="text" name="username" required autofocus placeholder="输入账号"></label>
+      <label>密码<input type="password" name="password" required placeholder="输入密码"></label>
+      <button type="submit" class="btn-block">登录</button>
+    </form>
+    <p class="login-tip">登录后先进前台看数据，管理员可从侧边栏进管理后台</p>
+  </div>
 </div>
 </body>
 </html>

@@ -3,27 +3,48 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{% block title %}AI 与电商数据采集{% endblock %}</title>
+<title>{% block title %}数据采集{% endblock %}</title>
 <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-<header class="topbar">
-  <div class="wrap">
-    <a class="logo" href="/">📊 AI 与电商数据采集</a>
-    <nav>
-      {% if user %}
-        <span class="hello">你好，{{ user.username }}</span>
-        {% if user.is_admin %}<a href="/admin">管理后台</a>{% endif %}
-        <a href="/logout">退出</a>
-      {% else %}
-        <a href="/login">登录</a>
+<div class="layout">
+  <aside class="sidebar">
+    <a class="logo" href="/">📊 数据采集</a>
+    <nav class="sidenav">
+      {% block sidenav %}
+      <a href="/" class="{% if active == 'home' %}on{% endif %}"><span class="nav-ico">🏠</span>首页</a>
+      {% for m in modules %}
+      <a href="/m/{{ m.id }}" class="{% if active == m.id %}on{% endif %}"><span class="nav-ico">{{ m.icon or '📁' }}</span>{{ m.name }}</a>
+      {% endfor %}
+      {% if user and user.is_admin %}
+      <a href="/admin" class="nav-admin"><span class="nav-ico">🛠️</span>管理后台</a>
       {% endif %}
+      {% endblock %}
     </nav>
+    <div class="side-foot">数据每天凌晨 3 点<br>自动更新</div>
+  </aside>
+  <div class="maincol">
+    <header class="topbar">
+      {% if admin_page %}
+      <div class="topbar-title">🛠️ 管理后台</div>
+      {% else %}
+      <form class="searchbar" method="get" action="/search">
+        <input type="text" name="q" placeholder="搜标题、简介…" value="{{ q or '' }}">
+        <button type="submit" title="搜索">🔍</button>
+      </form>
+      {% endif %}
+      <div class="userbox">
+        {% if user and user.is_admin and not admin_page %}
+        <a class="btn small" href="/admin">管理后台</a>
+        {% endif %}
+        <span class="avatar" title="{{ user.username if user else '' }}">{{ (user.username if user else '?')[:1] }}</span>
+        <a class="logout" href="/logout">退出</a>
+      </div>
+    </header>
+    <main class="content">
+      {% block content %}{% endblock %}
+    </main>
   </div>
-</header>
-<main class="wrap">
-  {% block content %}{% endblock %}
-</main>
-<footer class="wrap footer">数据每天凌晨 3 点自动更新 · GitHub 项目按星数取前 15 名</footer>
+</div>
 </body>
 </html>

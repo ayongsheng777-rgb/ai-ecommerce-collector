@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}{{ module.name }} - 数据采集{% endblock %}
+{% block content %}
+<p class="crumb"><a href="/">首页</a> / <b>{{ module.name }}</b></p>
+
+{% for sub in module.subcategories %}
+<section class="panel subpanel">
+  <div class="subpanel-head">
+    <h2><span class="nav-ico">{{ module.icon or '📁' }}</span>{{ sub.name }}</h2>
+    <span class="sub-count">{{ counts.get(sub.id, 0) }} 条</span>
+  </div>
+  <p class="src-note">数据来源：{{ source_label.get(sub.source, sub.source) }}{% if not sub.enabled %} · <b class="bad">已停用</b>{% endif %}</p>
+  {% set items = previews.get(sub.id, []) %}
+  {% if items %}
+  <ul class="items">
+    {% for it in items %}
+    {% include "frontend/_item.html" %}
+    {% endfor %}
+  </ul>
+  {% if counts.get(sub.id, 0) > 5 %}
+  <a class="btn ghost small" href="/c/{{ sub.id }}">看全部 {{ counts.get(sub.id, 0) }} 条 →</a>
+  {% endif %}
+  {% else %}
+  <p class="empty">这个分类还没有数据。</p>
+  {% endif %}
+</section>
+{% endfor %}
+{% endblock %}

@@ -1,16 +1,10 @@
 {% extends "base.html" %}
-{% block title %}{% if item %}改条目{% else %}添加条目{% endif %}{% endblock %}
+{% block title %}{% if item %}改条目{% else %}添加条目{% endif %} - 管理后台{% endblock %}
+{% block sidenav %}{% include "admin/_sidenav.html" %}{% endblock %}
 {% block content %}
-<h2>{% if item %}改条目{% else %}添加一条{% endif %}</h2>
-<nav class="admin-nav">
-  <a href="/admin">总览</a>
-  <a href="/admin/items" class="on">条目管理</a>
-  <a href="/admin/categories">分类开关</a>
-  <a href="/admin/users">账号管理</a>
-  <a href="/admin/password">改我的密码</a>
-</nav>
+<h2 class="page-title">{% if item %}改条目{% else %}添加一条{% endif %}</h2>
 
-<form method="post" action="{% if item %}/admin/items/{{ item.id }}/edit{% else %}/admin/items/new{% endif %}" class="form">
+<form method="post" action="{% if item %}/admin/items/{{ item.id }}/edit{% else %}/admin/items/new{% endif %}" class="form panel">
   <label>放到哪个分类
     <select name="subcategory_id">
       {% for m in modules %}{% for s in m.subcategories %}

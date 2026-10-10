@@ -1,8 +1,11 @@
-# 分类体系：5 大模块、18 子分类
-# source 类型：github（从 GitHub 按星级自动采集）、rss（从新闻订阅自动采集）、manual（管理员在后台手动录入）
+# 分类体系：3 大模块、12 子分类
+# source 类型：github（从 GitHub 按星级自动采集）、rss（从中文新闻订阅自动采集）、
+#             rss_en（从英文新闻订阅自动采集，标题和摘要会自动翻译成中文双语展示）、
+#             manual（管理员在后台手动录入；后台条目管理可给任意子分类加条目）
 modules:
   - id: ai
     name: AI软件技术追新
+    icon: 🤖
     subcategories:
       - id: ai_llm_framework
         name: 大模型应用框架
@@ -32,6 +35,7 @@ modules:
 
   - id: ecommerce_tools
     name: 电商工具软件
+    icon: 🛍️
     subcategories:
       - id: erp
         name: 电商ERP系统
@@ -48,9 +52,16 @@ modules:
         source: github
         github_query: "video editing OR short video maker stars:>200"
         enabled: true
+      - id: live_tools
+        name: 直播带货与选品工具
+        source: github
+        # 已用 GitHub API 实际验证：能搜出 TikTok 电商相关工具（如带货短视频生成、选品 skills）
+        github_query: "tiktok ecommerce stars:>50"
+        enabled: true
 
   - id: ecommerce_news
     name: 电商资讯
+    icon: 📰
     subcategories:
       - id: platform_rules
         name: 平台规则变化
@@ -60,44 +71,7 @@ modules:
         name: 电商行业新闻
         source: rss
         enabled: true
-
-  - id: sales_rank
-    name: 平台销售排行
-    subcategories:
-      - id: rank_taobao
-        name: 淘宝天猫
-        source: manual
-        enabled: true
-      - id: rank_jd
-        name: 京东
-        source: manual
-        enabled: true
-      - id: rank_pdd
-        name: 拼多多
-        source: manual
-        enabled: true
-      - id: rank_douyin
-        name: 抖音电商
-        source: manual
-        enabled: true
-      - id: rank_amazon
-        name: 亚马逊
-        source: manual
-        enabled: true
-
-  - id: influencer
-    name: 达人与带货
-    subcategories:
-      - id: influencer_rank
-        name: 达人榜单数据
-        source: manual
-        enabled: true
-      - id: live_tools
-        name: 直播带货与选品工具
-        source: github
-        github_query: "livestream ecommerce OR live shopping stars:>50"
-        enabled: true
-      - id: trend
-        name: 带货趋势方向
-        source: manual
+      - id: overseas_ai
+        name: 海外AI电商资讯
+        source: rss_en
         enabled: true

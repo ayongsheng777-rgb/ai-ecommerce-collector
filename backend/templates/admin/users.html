@@ -1,14 +1,8 @@
 {% extends "base.html" %}
-{% block title %}账号管理{% endblock %}
+{% block title %}账号管理 - 管理后台{% endblock %}
+{% block sidenav %}{% include "admin/_sidenav.html" %}{% endblock %}
 {% block content %}
-<h2>账号管理</h2>
-<nav class="admin-nav">
-  <a href="/admin">总览</a>
-  <a href="/admin/items">条目管理</a>
-  <a href="/admin/categories">分类开关</a>
-  <a href="/admin/users" class="on">账号管理</a>
-  <a href="/admin/password">改我的密码</a>
-</nav>
+<h2 class="page-title">👥 账号管理</h2>
 {% if request.query_params.get("msg") == "bad" %}<div class="alert">账号已存在，或账号密码没填。</div>{% endif %}
 {% if request.query_params.get("msg") == "reset" %}<div class="ok">密码已重置。</div>{% endif %}
 
@@ -22,6 +16,7 @@
   </form>
 </div>
 
+<div class="panel">
 <table>
   <tr><th>账号</th><th>身份</th><th>创建时间</th><th>操作</th></tr>
   {% for u in users %}
@@ -43,4 +38,5 @@
   </tr>
   {% endfor %}
 </table>
+</div>
 {% endblock %}

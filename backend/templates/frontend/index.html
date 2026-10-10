@@ -1,18 +1,37 @@
 {% extends "base.html" %}
-{% block title %}首页 - AI 与电商数据采集{% endblock %}
+{% block title %}首页 - 数据采集{% endblock %}
 {% block content %}
-{% for m in modules %}
-<section class="module">
-  <h2>{{ m.name }}</h2>
-  <div class="cards">
-    {% for sub in m.subcategories %}
-    <a class="card" href="/c/{{ sub.id }}">
-      <div class="card-title">{{ sub.name }}</div>
-      <div class="card-meta">{{ source_label.get(sub.source, sub.source) }} · {{ counts.get(sub.id, 0) }} 条</div>
-      {% if not sub.enabled %}<div class="card-off">已停用</div>{% endif %}
-    </a>
-    {% endfor %}
+<section class="banner">
+  <div class="banner-text">
+    <h1>欢迎回来{% if user %}，{{ user.username }}{% endif %} 👋</h1>
+    <p>今天是 {{ today }} · 今日已更新 <b>{{ today_count }}</b> 条</p>
   </div>
+  <div class="banner-deco">📊</div>
 </section>
-{% endfor %}
+
+<section class="modcards">
+  {% for m in modules %}
+  <a class="modcard" href="/m/{{ m.id }}">
+    <div class="mod-ico ico-{{ m.id }}">{{ m.icon or '📁' }}</div>
+    <div class="mod-info">
+      <div class="mod-name">{{ m.name }}</div>
+      <div class="mod-count">{{ module_counts.get(m.id, 0) }} 条</div>
+    </div>
+    <div class="mod-go">进入 →</div>
+  </a>
+  {% endfor %}
+</section>
+
+<section class="panel">
+  <h2>🆕 最新动态</h2>
+  {% if latest %}
+  <ul class="items">
+    {% for it in latest %}
+    {% include "frontend/_item.html" %}
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="empty">还没有数据。管理员可以在后台点"立即采集一次"。</p>
+  {% endif %}
+</section>
 {% endblock %}

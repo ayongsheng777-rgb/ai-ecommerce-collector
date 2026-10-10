@@ -1,0 +1,21 @@
+{# 一条数据的展示：双语规则
+   主标题显示 title_cn（没有就显示 title）；title_cn 存在且和 title 不同时，下方小字显示英文原标题。
+   简介显示 summary_cn（没有就显示 description）；summary_cn 存在时，下方小字显示英文原文。
+   GitHub 仓库名不翻译，只翻简介。 #}
+<li class="item">
+  {% set t = it.title_cn if it.title_cn else it.title %}
+  <a class="item-title" href="{{ it.url }}" target="_blank" rel="noopener">{{ t }}</a>
+  {% if it.title_cn and it.title_cn != it.title %}
+  <div class="item-en">{{ it.title }}</div>
+  {% endif %}
+  <div class="item-meta">
+    {% if it.stars %}<span class="stars">⭐ {{ it.stars }}</span>{% endif %}
+    <span>{{ it.source_name }}</span>
+    {% if it.published_at %}<span>{{ it.published_at[:10] }}</span>{% endif %}
+  </div>
+  {% set d = it.summary_cn if it.summary_cn else it.description %}
+  {% if d %}<p class="item-desc">{{ d }}</p>{% endif %}
+  {% if it.summary_cn and it.description and it.summary_cn != it.description %}
+  <p class="item-en">{{ it.description }}</p>
+  {% endif %}
+</li>

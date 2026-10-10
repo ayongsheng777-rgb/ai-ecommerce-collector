@@ -1,6 +1,9 @@
-# 新闻订阅源（RSS）：电商资讯 2 个子分类从这些网站自动抓取新闻
-# 每个源都已实际验证能拉到内容。category 指定归属哪个子分类：
+# 新闻订阅源（RSS）：电商资讯的中文分类从 feeds 自动抓取，英文分类从 english_feeds 自动抓取
+# feeds 下每条的 category 指定归属哪个子分类：
 #   platform_rules = 平台规则变化，industry_news = 电商行业新闻
+# english_feeds 下每条的 category 填 overseas_ai（海外AI电商资讯），抓到的英文标题和摘要
+# 会自动翻译成中文，前台双语展示（中文在上、英文原文小字在下）
+# 所有英文源都已实际验证能拉到内容。
 feeds:
   - name: 36氪快讯
     url: https://www.36kr.com/feed
@@ -21,4 +24,18 @@ feeds:
   - name: 博客园首页
     url: https://feed.cnblogs.com/blog/sitehome/rss
     category: industry_news
+    enabled: true
+
+english_feeds:
+  - name: TechCrunch AI
+    url: https://techcrunch.com/category/artificial-intelligence/feed/
+    category: overseas_ai
+    enabled: true
+  - name: MIT科技评论
+    url: https://www.technologyreview.com/feed/
+    category: overseas_ai
+    enabled: true
+  - name: Ars Technica AI
+    url: https://arstechnica.com/ai/feed/
+    category: overseas_ai
     enabled: true

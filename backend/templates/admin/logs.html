@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}采集日志 - 管理后台{% endblock %}
+{% block sidenav %}{% include "admin/_sidenav.html" %}{% endblock %}
+{% block content %}
+<h2 class="page-title">🧾 采集日志</h2>
+<div class="panel">
+  {% if logs %}
+  <table>
+    <tr><th>任务</th><th>结果</th><th>条数</th><th>开始时间</th><th>结束时间</th><th>说明</th></tr>
+    {% for l in logs %}
+    <tr>
+      <td>{{ l.task_name }}</td>
+      <td class="{{ 'good' if l.status == '成功' else 'bad' }}">{{ l.status }}</td>
+      <td>{{ l.count }}</td>
+      <td>{{ l.started_at }}</td>
+      <td>{{ l.finished_at }}</td>
+      <td class="small">{{ l.message[:100] }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  <p>还没有采集记录。</p>
+  {% endif %}
+</div>
+{% endblock %}

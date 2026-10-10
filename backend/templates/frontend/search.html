@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}搜索 - 数据采集{% endblock %}
+{% block content %}
+<h2 class="page-title">🔍 搜索{% if q %}：{{ q }}{% endif %}</h2>
+{% if q %}
+  {% if items %}
+  <p class="src-note">找到 {{ items|length }} 条相关结果（搜标题和简介，含英文资讯的中文译文）</p>
+  <ul class="items">
+    {% for it in items %}
+    {% include "frontend/_item.html" %}
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="empty">没搜到"{{ q }}"相关的内容，换个关键词试试。</p>
+  {% endif %}
+{% else %}
+<p class="empty">在右上角的搜索框里输入关键词试试。</p>
+{% endif %}
+{% endblock %}
