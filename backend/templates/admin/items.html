@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}条目管理{% endblock %}
+{% block content %}
+<h2>条目管理</h2>
+<nav class="admin-nav">
+  <a href="/admin">总览</a>
+  <a href="/admin/items" class="on">条目管理</a>
+  <a href="/admin/categories">分类开关</a>
+  <a href="/admin/users">账号管理</a>
+  <a href="/admin/password">改我的密码</a>
+</nav>
+
+<form class="inline-form" method="get" action="/admin/items">
+  <label>按分类看：
+    <select name="sub" onchange="this.form.submit()">
+      <option value="">只看人工录入的</option>
+      {% for m in modules %}{% for s in m.subcategories %}
+      <option value="{{ s.id }}" {% if cur_sub == s.id %}selected{% endif %}>{{ m.name }} - {{ s.name }}</option>
+      {% endfor %}{% endfor %}
+    </select>
+  </label>
+  <a class="btn" href="/admin/items/new">＋ 添加一条</a>
+</form>
+
+<table>
+  <tr><th>标题</th><th>分类</th><th>来源</th><th>操作</th></tr>
+  {% for it in items %}
+  <tr>
+    <td><a href="{{ it.url }}" target="_blank" rel="noopener">{{ it.title[:40] }}</a></td>
+    <td>{{ it.subcategory_id }}</td>
+    <td>{{ it.source_name }}</td>
+    <td class="ops">
+      <a href="/admin/items/{{ it.id }}/edit">改</a>
+      <form method="post" action="/admin/items/{{ it.id }}/delete" onsubmit="return confirm('确定删除这条吗？')">
+        <button class="link-btn danger" type="submit">删</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% if not items %}<p class="empty">这里还没有条目，点右上角"添加一条"开始录入。</p>{% endif %}
+{% endblock %}

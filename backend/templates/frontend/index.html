@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}首页 - AI 与电商数据采集{% endblock %}
+{% block content %}
+{% for m in modules %}
+<section class="module">
+  <h2>{{ m.name }}</h2>
+  <div class="cards">
+    {% for sub in m.subcategories %}
+    <a class="card" href="/c/{{ sub.id }}">
+      <div class="card-title">{{ sub.name }}</div>
+      <div class="card-meta">{{ source_label.get(sub.source, sub.source) }} · {{ counts.get(sub.id, 0) }} 条</div>
+      {% if not sub.enabled %}<div class="card-off">已停用</div>{% endif %}
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}{% if item %}改条目{% else %}添加条目{% endif %}{% endblock %}
+{% block content %}
+<h2>{% if item %}改条目{% else %}添加一条{% endif %}</h2>
+<nav class="admin-nav">
+  <a href="/admin">总览</a>
+  <a href="/admin/items" class="on">条目管理</a>
+  <a href="/admin/categories">分类开关</a>
+  <a href="/admin/users">账号管理</a>
+  <a href="/admin/password">改我的密码</a>
+</nav>
+
+<form method="post" action="{% if item %}/admin/items/{{ item.id }}/edit{% else %}/admin/items/new{% endif %}" class="form">
+  <label>放到哪个分类
+    <select name="subcategory_id">
+      {% for m in modules %}{% for s in m.subcategories %}
+      <option value="{{ s.id }}" {% if item and item.subcategory_id == s.id %}selected{% endif %}>{{ m.name }} - {{ s.name }}</option>
+      {% endfor %}{% endfor %}
+    </select>
+  </label>
+  <label>标题<input type="text" name="title" value="{{ item.title if item else '' }}" required maxlength="200"></label>
+  <label>链接（点标题就跳到这里）<input type="url" name="url" value="{{ item.url if item else '' }}" required placeholder="https://"></label>
+  <label>一句话说明<textarea name="description" maxlength="300" rows="3">{{ item.description if item else '' }}</textarea></label>
+  <label>来源名称（比如：淘宝官方、人工整理）<input type="text" name="source_name" value="{{ item.source_name if item else '' }}" placeholder="人工录入"></label>
+  <button type="submit">保存</button>
+  <a class="btn ghost" href="/admin/items">取消</a>
+</form>
+{% endblock %}

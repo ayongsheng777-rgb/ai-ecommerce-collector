@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}管理后台{% endblock %}
+{% block content %}
+<h2>管理后台</h2>
+<nav class="admin-nav">
+  <a href="/admin" class="on">总览</a>
+  <a href="/admin/items">条目管理</a>
+  <a href="/admin/categories">分类开关</a>
+  <a href="/admin/users">账号管理</a>
+  <a href="/admin/password">改我的密码</a>
+  <a href="/">去前台看看</a>
+</nav>
+
+{% if request.query_params.get("msg") == "started" %}
+<div class="ok">已开始采集，在后台慢慢跑，稍后刷新看日志。</div>
+{% elif request.query_params.get("msg") == "collecting" %}
+<div class="alert">正在采集中，请稍后再试。</div>
+{% endif %}
+
+<div class="panel">
+  <h3>采集</h3>
+  <p>库里共有 <b>{{ total_items }}</b> 条数据。每天凌晨 3 点自动采集一次，也可以现在手动来一次：</p>
+  <form method="post" action="/admin/collect">
+    <button type="submit">立即采集一次</button>
+  </form>
+</div>
+
+<div class="panel">
+  <h3>最近采集记录</h3>
+  {% if logs %}
+  <table>
+    <tr><th>任务</th><th>结果</th><th>条数</th><th>开始时间</th><th>说明</th></tr>
+    {% for l in logs %}
+    <tr>
+      <td>{{ l.task_name }}</td>
+      <td class="{{ 'good' if l.status == '成功' else 'bad' }}">{{ l.status }}</td>
+      <td>{{ l.count }}</td>
+      <td>{{ l.started_at }}</td>
+      <td class="small">{{ l.message[:80] }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+  <p>还没有采集记录。</p>
+  {% endif %}
+</div>
+{% endblock %}

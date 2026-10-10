@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}分类开关{% endblock %}
+{% block content %}
+<h2>分类开关</h2>
+<nav class="admin-nav">
+  <a href="/admin">总览</a>
+  <a href="/admin/items">条目管理</a>
+  <a href="/admin/categories" class="on">分类开关</a>
+  <a href="/admin/users">账号管理</a>
+  <a href="/admin/password">改我的密码</a>
+</nav>
+<p>关掉的分类前台就不显示。GitHub 和新闻类关掉后也不会再采集它。</p>
+{% for m in modules %}
+<div class="panel">
+  <h3>{{ m.name }}</h3>
+  <table>
+    <tr><th>子分类</th><th>数据来源</th><th>状态</th><th>操作</th></tr>
+    {% for s in m.subcategories %}
+    <tr>
+      <td>{{ s.name }}</td>
+      <td>{{ {"github": "GitHub 自动", "rss": "新闻订阅自动", "manual": "人工录入"}.get(s.source, s.source) }}</td>
+      <td class="{{ 'good' if s.enabled else 'bad' }}">{{ "开" if s.enabled else "关" }}</td>
+      <td>
+        <form method="post" action="/admin/categories/toggle">
+          <input type="hidden" name="sub_id" value="{{ s.id }}">
+          <input type="hidden" name="enabled" value="{{ '0' if s.enabled else '1' }}">
+          <button class="link-btn" type="submit">{{ "关掉" if s.enabled else "打开" }}</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endfor %}
+{% endblock %}

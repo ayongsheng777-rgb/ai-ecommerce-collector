@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}AI 与电商数据采集{% endblock %}</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap">
+    <a class="logo" href="/">📊 AI 与电商数据采集</a>
+    <nav>
+      {% if user %}
+        <span class="hello">你好，{{ user.username }}</span>
+        {% if user.is_admin %}<a href="/admin">管理后台</a>{% endif %}
+        <a href="/logout">退出</a>
+      {% else %}
+        <a href="/login">登录</a>
+      {% endif %}
+    </nav>
+  </div>
+</header>
+<main class="wrap">
+  {% block content %}{% endblock %}
+</main>
+<footer class="wrap footer">数据每天凌晨 3 点自动更新 · GitHub 项目按星数取前 15 名</footer>
+</body>
+</html>
