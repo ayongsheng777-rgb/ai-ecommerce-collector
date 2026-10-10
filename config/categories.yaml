@@ -1,0 +1,103 @@
+# 分类体系：5 大模块、18 子分类
+# source 类型：github（从 GitHub 按星级自动采集）、rss（从新闻订阅自动采集）、manual（管理员在后台手动录入）
+modules:
+  - id: ai
+    name: AI软件技术追新
+    subcategories:
+      - id: ai_llm_framework
+        name: 大模型应用框架
+        source: github
+        github_query: "llm framework stars:>500"
+        enabled: true
+      - id: ai_image_video
+        name: AI绘画与视频生成
+        source: github
+        github_query: "AI image generation OR video generation stars:>500"
+        enabled: true
+      - id: ai_voice_avatar
+        name: AI语音与数字人
+        source: github
+        github_query: "text to speech OR digital human stars:>300"
+        enabled: true
+      - id: ai_agent
+        name: AI智能体与自动化
+        source: github
+        github_query: "AI agent stars:>500"
+        enabled: true
+      - id: ai_rag
+        name: AI知识库与搜索
+        source: github
+        github_query: "RAG retrieval augmented generation stars:>500"
+        enabled: true
+
+  - id: ecommerce_tools
+    name: 电商工具软件
+    subcategories:
+      - id: erp
+        name: 电商ERP系统
+        source: github
+        github_query: "ecommerce ERP stars:>100"
+        enabled: true
+      - id: image_tools
+        name: 电商图片制作工具
+        source: github
+        github_query: "product image generator OR ecommerce image stars:>100"
+        enabled: true
+      - id: video_tools
+        name: 电商视频制作工具
+        source: github
+        github_query: "video editing OR short video maker stars:>200"
+        enabled: true
+
+  - id: ecommerce_news
+    name: 电商资讯
+    subcategories:
+      - id: platform_rules
+        name: 平台规则变化
+        source: rss
+        enabled: true
+      - id: industry_news
+        name: 电商行业新闻
+        source: rss
+        enabled: true
+
+  - id: sales_rank
+    name: 平台销售排行
+    subcategories:
+      - id: rank_taobao
+        name: 淘宝天猫
+        source: manual
+        enabled: true
+      - id: rank_jd
+        name: 京东
+        source: manual
+        enabled: true
+      - id: rank_pdd
+        name: 拼多多
+        source: manual
+        enabled: true
+      - id: rank_douyin
+        name: 抖音电商
+        source: manual
+        enabled: true
+      - id: rank_amazon
+        name: 亚马逊
+        source: manual
+        enabled: true
+
+  - id: influencer
+    name: 达人与带货
+    subcategories:
+      - id: influencer_rank
+        name: 达人榜单数据
+        source: manual
+        enabled: true
+      - id: live_tools
+        name: 直播带货与选品工具
+        source: github
+        github_query: "livestream ecommerce OR live shopping stars:>50"
+        enabled: true
+      - id: trend
+        name: 带货趋势方向
+        source: manual
+        enabled: true

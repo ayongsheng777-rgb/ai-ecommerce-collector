@@ -1,0 +1,11 @@
+services:
+  collector:
+    build: .
+    container_name: ai-ecommerce-collector
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data   # 数据库文件存在这里，容器删了数据还在
+    restart: unless-stopped

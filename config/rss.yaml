@@ -1,0 +1,24 @@
+# 新闻订阅源（RSS）：电商资讯 2 个子分类从这些网站自动抓取新闻
+# 每个源都已实际验证能拉到内容。category 指定归属哪个子分类：
+#   platform_rules = 平台规则变化，industry_news = 电商行业新闻
+feeds:
+  - name: 36氪快讯
+    url: https://www.36kr.com/feed
+    category: industry_news
+    enabled: true
+  - name: IT之家
+    url: https://www.ithome.com/rss/
+    category: industry_news
+    enabled: true
+  - name: 钛媒体
+    url: https://www.tmtpost.com/rss.xml
+    category: industry_news
+    enabled: true
+  - name: 雷锋网
+    url: https://www.leiphone.com/feed
+    category: platform_rules
+    enabled: true
+  - name: 博客园首页
+    url: https://feed.cnblogs.com/blog/sitehome/rss
+    category: industry_news
+    enabled: true
