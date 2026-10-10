@@ -1,17 +1,32 @@
-"""RSS 资讯采集器：从 config/rss.yaml 的订阅源抓新闻，归到对应子分类"""
+"""RSS 资讯采集器：从 config/rss.yaml 的订阅源抓新闻，归到对应子分类。
+
+中文源（feeds）直接入库；英文源（english_feeds）抓到的条目，
+标题和摘要会翻译成中文（title_cn/summary_cn），lang 记为 'en'，前台双语展示。
+"""
+import re
 import time
 import yaml
 import feedparser
 from datetime import datetime
+
+from .translator import translate
 
 CONFIG_PATH = "config/rss.yaml"
 MAX_PER_FEED = 15
 
 
 def load_feeds():
+    """返回全部订阅源，英文源多带一个 en=True 标记"""
     with open(CONFIG_PATH, "r", encoding="utf-8") as f:
         cfg = yaml.safe_load(f)
-    return [x for x in cfg.get("feeds", []) if x.get("enabled", True)]
+    out = []
+    for x in cfg.get("feeds", []):
+        if x.get("enabled", True):
+            out.append({**x, "en": False})
+    for x in cfg.get("english_feeds", []):
+        if x.get("enabled", True):
+            out.append({**x, "en": True})
+    return out
 
 
 def collect_rss():
@@ -21,7 +36,7 @@ def collect_rss():
     detail = {}
     now = datetime.now().isoformat(timespec="seconds")
     for feed in load_feeds():
-        name, url, sub_id = feed["name"], feed["url"], feed["category"]
+        name, url, sub_id, is_en = feed["name"], feed["url"], feed["category"], feed["en"]
         try:
             parsed = feedparser.parse(url, agent="ai-ecommerce-collector")
             entries = parsed.entries[:MAX_PER_FEED]
@@ -40,18 +55,25 @@ def collect_rss():
             link = e.get("link", "")
             if not link:
                 continue
+            title = (e.get("title") or "")[:200]
             summary = (e.get("summary") or e.get("description") or "").strip()
             # 去掉摘要里的网页标签，只留文字
-            import re
             summary = re.sub(r"<[^>]+>", "", summary)[:200]
             pub = ""
             if e.get("published_parsed"):
                 pub = datetime(*e.published_parsed[:6]).isoformat(timespec="seconds")
+            title_cn, summary_cn, lang = "", "", "zh"
+            if is_en:
+                # 英文源：标题和摘要翻成中文，双语入库
+                title_cn = translate(title)
+                summary_cn = translate(summary)
+                lang = "en"
             conn.execute(
                 """INSERT INTO items (subcategory_id, title, url, description, source_name,
-                                      published_at, collected_at, is_manual)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, 0)""",
-                (sub_id, (e.get("title") or "")[:200], link, summary, name, pub, now),
+                                      stars, published_at, collected_at, is_manual,
+                                      title_cn, summary_cn, lang)
+                   VALUES (?, ?, ?, ?, ?, NULL, ?, ?, 0, ?, ?, ?)""",
+                (sub_id, title, link, summary, name, pub, now, title_cn, summary_cn, lang),
             )
             n += 1
         conn.commit()

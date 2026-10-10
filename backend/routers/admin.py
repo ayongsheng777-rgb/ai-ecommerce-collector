@@ -17,8 +17,10 @@ templates = Jinja2Templates(directory="backend/templates")
 _collecting = False
 
 
-def _tpl(name, request, **kw):
-    kw.update({"request": request, "user": request.session.get("user")})
+def _tpl(name, request, active="", **kw):
+    user = request.session.get("user")
+    kw.update({"request": request, "user": user, "modules": load_categories(),
+               "active": active, "admin_page": True})
     return templates.TemplateResponse(name, kw)
 
 
@@ -28,11 +30,22 @@ def dashboard(request: Request):
     if redir:
         return redir
     conn = get_conn()
-    logs = conn.execute("SELECT * FROM collect_logs ORDER BY id DESC LIMIT 20").fetchall()
+    logs = conn.execute("SELECT * FROM collect_logs ORDER BY id DESC LIMIT 10").fetchall()
     stats = conn.execute("SELECT COUNT(*) c FROM items").fetchone()["c"]
     conn.close()
-    return _tpl("admin/dashboard.html", request, logs=[dict(r) for r in logs],
-                total_items=stats, collecting=_collecting)
+    return _tpl("admin/dashboard.html", request, "dashboard",
+                logs=[dict(r) for r in logs], total_items=stats, collecting=_collecting)
+
+
+@router.get("/logs")
+def logs_page(request: Request):
+    redir = require_admin(request)
+    if redir:
+        return redir
+    conn = get_conn()
+    logs = conn.execute("SELECT * FROM collect_logs ORDER BY id DESC LIMIT 100").fetchall()
+    conn.close()
+    return _tpl("admin/logs.html", request, "logs", logs=[dict(r) for r in logs])
 
 
 @router.post("/collect")
@@ -77,7 +90,7 @@ def item_new(request: Request):
     redir = require_admin(request)
     if redir:
         return redir
-    return _tpl("admin/item_form.html", request, modules=load_categories(), item=None)
+    return _tpl("admin/item_form.html", request, "items", item=None)
 
 
 @router.post("/items/new")
@@ -109,7 +122,7 @@ def item_edit(request: Request, item_id: int):
     conn.close()
     if not row:
         return RedirectResponse(url="/admin/items", status_code=302)
-    return _tpl("admin/item_form.html", request, modules=load_categories(), item=dict(row))
+    return _tpl("admin/item_form.html", request, "items", item=dict(row))
 
 
 @router.post("/items/{item_id}/edit")
@@ -148,7 +161,7 @@ def categories_page(request: Request):
     redir = require_admin(request)
     if redir:
         return redir
-    return _tpl("admin/categories.html", request, modules=load_categories())
+    return _tpl("admin/categories.html", request, "categories")
 
 
 @router.post("/categories/toggle")
@@ -169,7 +182,7 @@ def users_page(request: Request):
     conn = get_conn()
     rows = conn.execute("SELECT id, username, is_admin, created_at FROM users ORDER BY id").fetchall()
     conn.close()
-    return _tpl("admin/users.html", request, users=[dict(r) for r in rows])
+    return _tpl("admin/users.html", request, "users", users=[dict(r) for r in rows])
 
 
 @router.post("/users/new")
@@ -227,7 +240,7 @@ def password_page(request: Request):
     redir = require_admin(request)
     if redir:
         return redir
-    return _tpl("admin/password.html", request, msg=request.query_params.get("msg", ""))
+    return _tpl("admin/password.html", request, "password", msg=request.query_params.get("msg", ""))
 
 
 @router.post("/password")

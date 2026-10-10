@@ -24,7 +24,7 @@ def do_login(request: Request, username: str = Form(...), password: str = Form(.
             "username": user["username"],
             "is_admin": bool(user["is_admin"]),
         }
-        return RedirectResponse(url="/admin" if user["is_admin"] else "/", status_code=302)
+        return RedirectResponse(url="/", status_code=302)
     return templates.TemplateResponse(
         "login.html", {"request": request, "error": "账号或密码不对，请再试一次"}, status_code=401
     )

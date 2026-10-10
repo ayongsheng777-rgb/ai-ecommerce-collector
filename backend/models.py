@@ -29,6 +29,16 @@ def init_db():
         )
     """)
     cur.execute("CREATE INDEX IF NOT EXISTS idx_items_sub ON items(subcategory_id)")
+    # 双语字段：老库升级，已存在的列跳过
+    for ddl in (
+        "ALTER TABLE items ADD COLUMN title_cn TEXT DEFAULT ''",
+        "ALTER TABLE items ADD COLUMN summary_cn TEXT DEFAULT ''",
+        "ALTER TABLE items ADD COLUMN lang TEXT DEFAULT 'zh'",
+    ):
+        try:
+            cur.execute(ddl)
+        except Exception:
+            pass  # 列已存在，跳过
     cur.execute("""
         CREATE TABLE IF NOT EXISTS subcat_state (
             subcategory_id TEXT PRIMARY KEY,
